@@ -1,0 +1,32 @@
+.TH NEKOTOOLS 1 "May 1, 2017" ""
+.SH NAME
+nekotools \- tools for developing Neko programs.
+.SH SYNOPSIS
+.B nekotools
+[ \fBserver\fR | \fBboot\fR ]
+[ \fIoptions\fR ]
+.SH DESCRIPTION
+.B nekotools
+is a command-line program that contains tools for developing Neko programs.
+.SH OPTIONS
+.TP
+.B server
+[ \fB\-p\fR \fIport\fR ]
+[ \fB\-h\fR \fIhost\fR ]
+[ \fB\-d\fR \fIdir\fR ]
+[ \fB\-log\fR \fIfile\fR ]
+[ \fB\-rewrite\fR ]
+start a neko web server.  The server can be configured through
+.IR "http://localhost:2000/server:config" .
+.TP
+.BI "boot " file.n
+convert the neko bytecode file into a standalone executable.
+.SH AUTHOR
+Neko is currently maintained by the Haxe Foundation.
+It was originally written by Nicolas Cannasse for Motion-Twin.
+.SH SEE ALSO
+.BR "neko" (1),
+.BR "nekoc" (1),
+.BR "nekoml" (1).
+.SH WEB
+.IR "http://nekovm.org" .

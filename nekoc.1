@@ -1,0 +1,47 @@
+.TH NEKOC 1 "May 1, 2017" ""
+.SH NAME
+nekoc \- compile Neko programs to Neko bytecode.
+.SH SYNOPSIS
+.B nekoc
+[ \fIoptions\fR ]
+\fIfile.neko\fR
+.SH DESCRIPTION
+.B nekoc
+is a command-line compiler which compiles Neko programs into Neko bytecode.
+.SH OPTIONS
+.HP
+\fB\-d\fR \fIfile\fR
+dump bytecode
+.HP
+\fB\-z\fR \fIfile\fR
+make bytecode release
+.HP
+\fB\-p\fR \fIfile\fR
+parse and print neko source
+.HP
+\fB\-doc\fR \fIfile\fR
+make documentation
+.HP
+\fB\-o\fR \fIdir\fR
+set output directory
+.HP
+\fB\-console\fR
+run the console
+.HP
+\fB\-link\fR \fIdir\fR
+link bytecodes files
+.HP
+\fB\-v\fR
+verbose mode
+.HP
+\fB\-version\fR
+set the bytecode version
+.SH AUTHOR
+Neko is currently maintained by the Haxe Foundation.
+It was originally written by Nicolas Cannasse for Motion-Twin.
+.SH SEE ALSO
+.BR "neko" (1),
+.BR "nekoml" (1),
+.BR "nekotools" (1).
+.SH WEB
+.IR "http://nekovm.org" .
