@@ -31,7 +31,7 @@ PKG_NAMES="neko neko-devel libneko2 neko-std-ndlls"
 
 neko_CATEGORY="Interpreters"
 neko_SUMMARY="Neko virtual machine, compilers, and utilities"
-neko_REQUIRES="libneko2 neko-std-ndlls"
+neko_REQUIRES="neko-std-ndlls"
 neko_CONTENTS="
 	usr/bin/neko.exe
 	usr/bin/nekoc.exe
