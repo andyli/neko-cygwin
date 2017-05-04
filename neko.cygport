@@ -17,11 +17,10 @@ SRC_URI="
 	http://nekovm.org/media/neko-${VERSION}-src.zip
 	neko.1
 	nekoc.1
-	nekoml.1
 	nekotools.1
 "
 SRC_DIR="neko-${VERSION}-src"
-PATCH_URI="cygwin_3215311.diff"
+PATCH_URI="cygwin_3215311.diff nekoml_5fc28bc.diff"
 DEPEND="
 	libgc-devel
 	libpcre-devel
@@ -41,7 +40,6 @@ neko_REQUIRES="neko-std-ndlls"
 neko_CONTENTS="
 	usr/bin/neko.exe
 	usr/bin/nekoc.exe
-	usr/bin/nekoml.exe
 	usr/bin/nekotools.exe
 	usr/share/doc/
 	usr/share/man/
@@ -71,6 +69,7 @@ neko_std_ndlls_REQUIRES="libneko2 libpcre1 zlib0 libapr1 libaprutil1 libmysqlcli
 
 CYGCMAKE_ARGS="
 	-DRUN_LDCONFIG=OFF
+	-DWITH_NEKOML=OFF
 "
 
 # nekoc, nekoml, and nekotools cannot be stripped since
@@ -88,12 +87,11 @@ src_install() {
 	# fix names, can be removed for next version, because
 	# upstream changed how they are built
 	mv ${D}/usr/bin/nekoc  ${D}/usr/bin/nekoc.exe
-	mv ${D}/usr/bin/nekoml  ${D}/usr/bin/nekoml.exe
 	mv ${D}/usr/bin/nekotools  ${D}/usr/bin/nekotools.exe
 
 	# generate manpages
 	install -d ${D}/usr/share/man/man1/
-	install ${S}/neko.1 ${S}/nekoc.1 ${S}/nekoml.1 ${S}/nekotools.1 ${D}/usr/share/man/man1/
+	install ${S}/neko.1 ${S}/nekoc.1 ${S}/nekotools.1 ${D}/usr/share/man/man1/
 }
 
 DIFF_EXCLUDES="

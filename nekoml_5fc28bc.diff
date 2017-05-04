@@ -1,0 +1,104 @@
+From 86cd4350e96f6be91fe5171d0f4f1942f860975f Mon Sep 17 00:00:00 2001
+From: Andy Li <andy@onthewings.net>
+Date: Thu, 4 May 2017 11:58:17 +0800
+Subject: [PATCH] Add WITH_NEKOML to be able to disable building nekoml.
+
+Mainly due to unknown issue of nekoml.exe seg fault in 32-bit cygwin.
+Applied in master as 5fc28bc4c050aebed7c17b8c3c98563f6f08b640.
+---
+ CMakeLists.txt | 56 +++++++++++++++++++++++++++++++-------------------------
+ 1 file changed, 31 insertions(+), 25 deletions(-)
+
+diff --git a/CMakeLists.txt b/CMakeLists.txt
+index 3361d73..16c4254 100644
+--- a/CMakeLists.txt
++++ b/CMakeLists.txt
+@@ -48,6 +48,8 @@ set(NEKO_VERSION_MAJOR 2)
+ set(NEKO_VERSION_MINOR 1)
+ set(NEKO_VERSION_PATCH 0)
+ 
++set(WITH_NEKOML ON CACHE BOOL "Build NekoML.")
++
+ configure_file (
+ 	"${CMAKE_SOURCE_DIR}/vm/neko.h.in"
+ 	"${CMAKE_BINARY_DIR}/neko.h"
+@@ -1024,17 +1026,13 @@ endif(APPLE)
+ # compilers
+ # nekoc, nekoml, nekotools, and test.n
+ 
+-if (WIN32)
+-	set(compilers_outputs
+-		${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/nekoc.exe
+-		${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/nekoml.exe
+-		${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/nekotools.exe
+-	)
+-else()
+-	set(compilers_outputs
+-		${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/nekoc
+-		${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/nekoml
+-		${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/nekotools
++set(compilers_outputs
++	${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/nekoc${CMAKE_EXECUTABLE_SUFFIX}
++	${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/nekotools${CMAKE_EXECUTABLE_SUFFIX}
++)
++if (WITH_NEKOML)
++	list(APPEND compilers_outputs
++		${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/nekoml${CMAKE_EXECUTABLE_SUFFIX}
+ 	)
+ endif()
+ 
+@@ -1091,18 +1089,24 @@ add_custom_command(OUTPUT ${compilers_outputs} ${CMAKE_RUNTIME_OUTPUT_DIRECTORY}
+ 	WORKING_DIRECTORY ${CMAKE_SOURCE_DIR}/src
+ )
+ 
+-file(GLOB CORE_NMLS RELATIVE ${CMAKE_SOURCE_DIR}/src src/core/*.nml)
+-set(nekoml_std ${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/nekoml.std)
+-add_custom_command(OUTPUT ${nekoml_std}
+-	COMMAND ${set_neko_env}
+-	COMMAND ${neko_exec} ../boot/nekoml.n -nostd neko/Main.nml nekoml/Main.nml ${CORE_NMLS} -pack ${nekoml_std}
+-	VERBATIM
+-	DEPENDS zlib.ndll ${compilers_outputs}
+-	WORKING_DIRECTORY ${CMAKE_SOURCE_DIR}/src
+-)
++if (WITH_NEKOML)
++	file(GLOB CORE_NMLS RELATIVE ${CMAKE_SOURCE_DIR}/src src/core/*.nml)
++	set(nekoml_std ${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/nekoml.std)
++	add_custom_command(OUTPUT ${nekoml_std}
++		COMMAND ${set_neko_env}
++		COMMAND ${neko_exec} ../boot/nekoml.n -nostd neko/Main.nml nekoml/Main.nml ${CORE_NMLS} -pack ${nekoml_std}
++		VERBATIM
++		DEPENDS zlib.ndll ${compilers_outputs}
++		WORKING_DIRECTORY ${CMAKE_SOURCE_DIR}/src
++	)
++
++	add_custom_target(nekoml.std ALL
++		DEPENDS ${nekoml_std}
++	)
++endif()
+ 
+ add_custom_target(compilers ALL
+-	DEPENDS ${compilers_outputs} ${nekoml_std}
++	DEPENDS ${compilers_outputs}
+ )
+ 
+ #######################
+@@ -1207,10 +1211,12 @@ install (
+ 	TARGETS ${WITH_NDLLS}
+ 	DESTINATION ${DEST_NDLL}
+ )
+-install (
+-	FILES ${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/nekoml.std
+-	DESTINATION ${DEST_NDLL}
+-)
++if (WITH_NEKOML)
++	install (
++		FILES ${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/nekoml.std
++		DESTINATION ${DEST_NDLL}
++	)
++endif()
+ install (
+ 	DIRECTORY vm/
+ 	DESTINATION include
+-- 
+2.8.1.windows.1
+
