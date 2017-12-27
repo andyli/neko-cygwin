@@ -1,0 +1,33 @@
+From f1846a1cf4e2e2913a8357c623c3156fdcbdfccc Mon Sep 17 00:00:00 2001
+From: Andy Li <andy@onthewings.net>
+Date: Wed, 27 Dec 2017 17:20:17 +0800
+Subject: [PATCH] On dll platforms (win/cygwin), we need to install the
+ archives (.dll.a).
+
+---
+ CMakeLists.txt | 2 ++
+ 1 file changed, 2 insertions(+)
+
+diff --git a/CMakeLists.txt b/CMakeLists.txt
+index bb551aa..a41a7a3 100644
+--- a/CMakeLists.txt
++++ b/CMakeLists.txt
+@@ -605,6 +605,7 @@ install (
+ 	EXPORT NekoTargets
+ 	RUNTIME DESTINATION ${DEST_BIN}
+ 	LIBRARY DESTINATION ${DEST_LIB}
++	ARCHIVE DESTINATION ${DEST_LIB}
+ 	PUBLIC_HEADER DESTINATION ${DEST_INCLUDE}
+ )
+ 
+@@ -615,6 +616,7 @@ if (WITH_NEKOML)
+ 		EXPORT NekoTargets
+ 		RUNTIME DESTINATION ${DEST_BIN}
+ 		LIBRARY DESTINATION ${DEST_LIB}
++		ARCHIVE DESTINATION ${DEST_LIB}
+ 		PUBLIC_HEADER DESTINATION ${DEST_INCLUDE}
+ 	)
+ 	install (
+-- 
+2.13.1.windows.1
+
