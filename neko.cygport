@@ -1,7 +1,7 @@
 inherit cmake
 
 NAME="neko"
-VERSION=2.2.0
+VERSION=2.3.0
 RELEASE=1
 CATEGORY="Interpreters"
 SUMMARY="Embedded scripting language and virtual machine"
@@ -21,8 +21,8 @@ SRC_URI="
 	nekotools.1
 "
 SRC_DIR="neko-${VERSION//./-}"
-PATCH_URI="install-archive.diff"
 DEPEND="
+	ninja
 	libgc-devel
 	libpcre-devel
 	zlib-devel
@@ -76,7 +76,7 @@ CYGCMAKE_ARGS="
 
 src_install() {
 	cd ${B}
-	cyginstall
+	ninja_install
 
 	# manpages
 	doman ${S}/neko*.1
